@@ -128,7 +128,7 @@ export default function Hero() {
             overflow: "hidden",
             boxShadow: "0 40px 80px rgba(0,0,0,0.5)",
           }}>
-            <Image src="./cake1.jpg" alt="Birthday cake with photo print" fill style={{ objectFit: "cover" }} />
+            <Image src="public/cake1.jpg" alt="Birthday cake with photo print" fill style={{ objectFit: "cover" }} />
             <div style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
               background: "linear-gradient(transparent, rgba(61,26,14,0.8))",
@@ -149,7 +149,7 @@ export default function Hero() {
             border: "3px solid var(--choco)",
             zIndex: 2,
           }}>
-            <Image src="/cake2.jpg" alt="Chocolate drip cake" fill style={{ objectFit: "cover" }} />
+            <Image src="public/cake2.jpg" alt="Chocolate drip cake" fill style={{ objectFit: "cover" }} />
           </div>
 
           {/* Gold badge */}
