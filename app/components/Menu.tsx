@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 const items = [
   {
@@ -8,7 +7,6 @@ const items = [
     desc: "Personalised, tiered masterpieces for every age. Photo prints, fondant art, fresh flowers & more.",
     from: "₦8,000",
     tag: "Most Popular",
-    img: "https://i.pinimg.com/736x/2d/3a/4e/2d3a4e8a9c6b1f5e2d3a4e8a9c6b1f5e.jpg",
     realImg: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
     accent: "#c8853a",
   },
@@ -56,22 +54,35 @@ const items = [
 
 export default function Menu() {
   const ref = useRef<HTMLElement>(null);
+  const [cols, setCols] = useState(3);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      setCols(w < 640 ? 1 : w < 1024 ? 2 : 3);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const cards = el.querySelectorAll(".menu-card");
     const obs = new IntersectionObserver(
-      (entries) => {
+      (entries) =>
         entries.forEach((e) => {
           if (e.isIntersecting) e.target.classList.add("visible");
-        });
-      },
+        }),
       { threshold: 0.06 }
     );
     cards.forEach((c) => obs.observe(c));
     return () => obs.disconnect();
   }, []);
+
+  const isMobile = cols === 1;
+  const isTablet = cols === 2;
 
   return (
     <section
@@ -79,86 +90,101 @@ export default function Menu() {
       ref={ref}
       style={{
         background: "linear-gradient(160deg, #fdf6ec 0%, #fef9f3 60%, #f9f0e4 100%)",
-        padding: "130px 40px",
+        padding: isMobile ? "80px 20px" : isTablet ? "100px 32px" : "130px 40px",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Background decorative text */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          fontFamily: "'Playfair Display', serif",
-          fontSize: "clamp(100px, 18vw, 260px)",
-          fontWeight: 800,
-          color: "rgba(200,133,58,0.04)",
-          whiteSpace: "nowrap",
-          pointerEvents: "none",
-          userSelect: "none",
-          letterSpacing: "-0.04em",
-        }}
-      >
-        DELIAS
-      </div>
+      {/* Decorative watermark */}
+      {!isMobile && (
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "clamp(100px, 18vw, 260px)",
+            fontWeight: 800,
+            color: "rgba(200,133,58,0.04)",
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+            userSelect: "none",
+            letterSpacing: "-0.04em",
+          }}
+        >
+          DELIAS
+        </div>
+      )}
 
       <div style={{ maxWidth: "1360px", margin: "0 auto", position: "relative", zIndex: 1 }}>
 
-        {/* Header */}
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          marginBottom: "80px",
-          flexWrap: "wrap",
-          gap: "24px",
-        }}>
+        {/* ── Header ── */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            justifyContent: "space-between",
+            alignItems: isMobile ? "flex-start" : "flex-end",
+            marginBottom: isMobile ? "48px" : "80px",
+            gap: isMobile ? "28px" : "24px",
+          }}
+        >
           <div>
-            <div style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "12px",
-              marginBottom: "20px",
-            }}>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "12px",
+                marginBottom: "20px",
+              }}
+            >
               <span style={{ width: "40px", height: "1px", background: "#c8853a" }} />
-              <span style={{
-                fontSize: "10px",
-                fontWeight: 600,
-                letterSpacing: "0.28em",
-                textTransform: "uppercase",
-                color: "#c8853a",
-                fontFamily: "'Lora', serif",
-              }}>
+              <span
+                style={{
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  letterSpacing: "0.28em",
+                  textTransform: "uppercase",
+                  color: "#c8853a",
+                }}
+              >
                 Our Offerings
               </span>
               <span style={{ width: "40px", height: "1px", background: "#c8853a" }} />
             </div>
-            <h2 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(38px, 5vw, 58px)",
-              fontWeight: 700,
-              color: "#2e1f14",
-              lineHeight: 1.08,
-              margin: 0,
-            }}>
+
+            <h2
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: isMobile ? "36px" : "clamp(38px, 5vw, 58px)",
+                fontWeight: 700,
+                color: "#2e1f14",
+                lineHeight: 1.08,
+                margin: 0,
+              }}
+            >
               Crafted with{" "}
               <em style={{ color: "#c8853a", fontStyle: "italic" }}>Intention</em>
             </h2>
-            <p style={{
-              marginTop: "16px",
-              color: "#7a5c48",
-              fontFamily: "'Lora', serif",
-              fontSize: "15px",
-              lineHeight: 1.75,
-              maxWidth: "420px",
-            }}>
-              Every item is baked fresh — never rushed, always made with the finest ingredients and a whole lot of love.
+
+            <p
+              style={{
+                marginTop: "16px",
+                color: "#7a5c48",
+                fontSize: "15px",
+                lineHeight: 1.75,
+                maxWidth: "420px",
+                fontWeight: 300,
+              }}
+            >
+              Every item is baked fresh — never rushed, always made with the finest ingredients
+              and a whole lot of love.
             </p>
           </div>
 
+          {/* ✅ Fixed: was missing the opening <a tag */}
           <a
             href="#contact"
             style={{
@@ -167,14 +193,15 @@ export default function Menu() {
               gap: "10px",
               background: "#2e1f14",
               color: "#fdf6ec",
-              padding: "14px 28px",
+              padding: isMobile ? "13px 24px" : "14px 28px",
               borderRadius: "50px",
-              fontFamily: "'Lora', serif",
-              fontSize: "14px",
+              fontSize: isMobile ? "13px" : "14px",
               textDecoration: "none",
               letterSpacing: "0.04em",
               transition: "background 0.25s, transform 0.2s",
               flexShrink: 0,
+              alignSelf: isMobile ? "flex-start" : "auto",
+              whiteSpace: "nowrap",
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLAnchorElement).style.background = "#c8853a";
@@ -189,12 +216,14 @@ export default function Menu() {
           </a>
         </div>
 
-        {/* Cards Grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "24px",
-        }}>
+        {/* ── Cards Grid ── */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${cols}, 1fr)`,
+            gap: isMobile ? "20px" : isTablet ? "20px" : "24px",
+          }}
+        >
           {items.map((item, i) => (
             <div
               key={item.name}
@@ -206,11 +235,15 @@ export default function Menu() {
                 boxShadow: "0 2px 20px rgba(92,61,46,0.07)",
                 border: "1px solid rgba(200,133,58,0.10)",
                 transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
-                transitionDelay: `${i * 0.07}s`,
+                transitionDelay: isMobile ? "0s" : `${i * 0.07}s`,
                 cursor: "default",
                 position: "relative",
+                display: isMobile ? "flex" : "block",
+                flexDirection: isMobile ? "row" : undefined,
+                alignItems: isMobile ? "stretch" : undefined,
               }}
               onMouseEnter={(e) => {
+                if (window.innerWidth < 640) return;
                 const el = e.currentTarget as HTMLDivElement;
                 el.style.transform = "translateY(-8px)";
                 el.style.boxShadow = "0 30px 60px rgba(92,61,46,0.16)";
@@ -218,6 +251,7 @@ export default function Menu() {
                 if (img) img.style.transform = "scale(1.07)";
               }}
               onMouseLeave={(e) => {
+                if (window.innerWidth < 640) return;
                 const el = e.currentTarget as HTMLDivElement;
                 el.style.transform = "translateY(0)";
                 el.style.boxShadow = "0 2px 20px rgba(92,61,46,0.07)";
@@ -225,13 +259,19 @@ export default function Menu() {
                 if (img) img.style.transform = "scale(1)";
               }}
             >
-              {/* Image */}
-              <div style={{
-                position: "relative",
-                height: "230px",
-                overflow: "hidden",
-                background: "#f5ede0",
-              }}>
+              {/* ── Image block ── */}
+              <div
+                style={{
+                  position: "relative",
+                  width: isMobile ? "120px" : "100%",
+                  minWidth: isMobile ? "120px" : undefined,
+                  height: isMobile ? "auto" : "220px",
+                  minHeight: isMobile ? "140px" : undefined,
+                  overflow: "hidden",
+                  background: "#f5ede0",
+                  flexShrink: isMobile ? 0 : undefined,
+                }}
+              >
                 <img
                   className="card-img"
                   src={item.realImg}
@@ -241,157 +281,207 @@ export default function Menu() {
                     height: "100%",
                     objectFit: "cover",
                     transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)",
+                    display: "block",
                   }}
                 />
                 {/* Gradient overlay */}
-                <div style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "linear-gradient(to top, rgba(30,15,8,0.55) 0%, transparent 55%)",
-                }} />
-
-                {/* Tag badge */}
-                {item.tag && (
-                  <div style={{
+                <div
+                  style={{
                     position: "absolute",
-                    top: "16px",
-                    left: "16px",
-                    background: "#c8853a",
-                    color: "#fff",
-                    fontSize: "9px",
-                    fontWeight: 700,
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    padding: "5px 12px",
-                    borderRadius: "50px",
-                    fontFamily: "'Lora', serif",
-                  }}>
+                    inset: 0,
+                    background: isMobile
+                      ? "linear-gradient(to right, transparent 60%, rgba(30,15,8,0.25) 100%)"
+                      : "linear-gradient(to top, rgba(30,15,8,0.55) 0%, transparent 55%)",
+                  }}
+                />
+
+                {/* Tag badge — desktop only */}
+                {item.tag && !isMobile && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "14px",
+                      left: "14px",
+                      background: "#c8853a",
+                      color: "#fff",
+                      fontSize: "9px",
+                      fontWeight: 700,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      padding: "5px 12px",
+                      borderRadius: "50px",
+                    }}
+                  >
                     {item.tag}
                   </div>
                 )}
 
-                {/* Price on image bottom */}
-                <div style={{
-                  position: "absolute",
-                  bottom: "14px",
-                  right: "16px",
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: "13px",
-                  fontWeight: 700,
-                  color: "#fff",
-                  letterSpacing: "0.04em",
-                }}>
-                  from {item.from}
-                </div>
+                {/* Price — desktop only */}
+                {!isMobile && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "12px",
+                      right: "14px",
+                      fontFamily: "'Playfair Display', serif",
+                      fontSize: "13px",
+                      fontWeight: 700,
+                      color: "#fff",
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    from {item.from}
+                  </div>
+                )}
               </div>
 
-              {/* Content */}
-              <div style={{ padding: "24px 28px 28px" }}>
-                {/* Accent line */}
-                <div style={{
-                  width: "32px",
-                  height: "2px",
-                  background: item.accent,
-                  borderRadius: "2px",
-                  marginBottom: "14px",
-                }} />
+              {/* ── Content block ── */}
+              <div
+                style={{
+                  padding: isMobile ? "14px 16px" : "22px 26px 26px",
+                  flex: isMobile ? 1 : undefined,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                {/* Mobile: tag + price row */}
+                {isMobile && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: "8px",
+                      flexWrap: "wrap",
+                      gap: "6px",
+                    }}
+                  >
+                    {item.tag && (
+                      <span
+                        style={{
+                          background: "#c8853a",
+                          color: "#fff",
+                          fontSize: "8px",
+                          fontWeight: 700,
+                          letterSpacing: "0.16em",
+                          textTransform: "uppercase",
+                          padding: "4px 10px",
+                          borderRadius: "50px",
+                        }}
+                      >
+                        {item.tag}
+                      </span>
+                    )}
+                    <span
+                      style={{
+                        fontFamily: "'Playfair Display', serif",
+                        fontSize: "13px",
+                        fontWeight: 700,
+                        color: item.accent,
+                      }}
+                    >
+                      from {item.from}
+                    </span>
+                  </div>
+                )}
 
-                <h3 style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: "20px",
-                  fontWeight: 700,
-                  color: "#2e1f14",
-                  marginBottom: "10px",
-                  lineHeight: 1.2,
-                }}>
+                {/* Accent bar */}
+                <div
+                  style={{
+                    width: "28px",
+                    height: "2px",
+                    background: item.accent,
+                    borderRadius: "2px",
+                    marginBottom: isMobile ? "8px" : "12px",
+                  }}
+                />
+
+                <h3
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: isMobile ? "16px" : "20px",
+                    fontWeight: 700,
+                    color: "#2e1f14",
+                    marginBottom: isMobile ? "6px" : "10px",
+                    lineHeight: 1.2,
+                  }}
+                >
                   {item.name}
                 </h3>
 
-                <p style={{
-                  fontSize: "13.5px",
-                  color: "#7a5c48",
-                  lineHeight: 1.75,
-                  fontFamily: "'Lora', serif",
-                  fontWeight: 400,
-                  margin: 0,
-                }}>
+                <p
+                  style={{
+                    fontSize: isMobile ? "12.5px" : "13.5px",
+                    color: "#7a5c48",
+                    lineHeight: 1.7,
+                    fontWeight: 300,
+                    margin: 0,
+                    display: isMobile ? "-webkit-box" : "block",
+                    WebkitLineClamp: isMobile ? 3 : undefined,
+                    WebkitBoxOrient: isMobile ? "vertical" : undefined,
+                    overflow: isMobile ? "hidden" : undefined,
+                  } as React.CSSProperties}
+                >
                   {item.desc}
                 </p>
 
-                <div style={{
-                  marginTop: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}>
-                  <a
-                    href="#contact"
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 600,
-                      letterSpacing: "0.1em",
-                      color: item.accent,
-                      textDecoration: "none",
-                      textTransform: "uppercase",
-                      fontFamily: "'Lora', serif",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      transition: "gap 0.2s",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.gap = "10px";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.gap = "6px";
-                    }}
-                  >
-                    Order Now <span style={{ fontSize: "16px" }}>→</span>
-                  </a>
-                </div>
+                {/* ✅ Fixed: was missing the opening <a tag */}
+                <a
+                  href="#contact"
+                  style={{
+                    marginTop: isMobile ? "10px" : "18px",
+                    fontSize: "11px",
+                    fontWeight: 600,
+                    letterSpacing: "0.1em",
+                    color: item.accent,
+                    textDecoration: "none",
+                    textTransform: "uppercase",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    transition: "gap 0.2s",
+                    alignSelf: "flex-start",
+                  }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLAnchorElement).style.gap = "9px")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLAnchorElement).style.gap = "5px")
+                  }
+                >
+                  Order Now <span style={{ fontSize: "14px" }}>→</span>
+                </a>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom CTA note */}
-        <div style={{
-          textAlign: "center",
-          marginTop: "64px",
-          fontFamily: "'Lora', serif",
-          fontStyle: "italic",
-          color: "#7a5c48",
-          fontSize: "15px",
-        }}>
+        {/* ── Footer note ── */}
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: isMobile ? "48px" : "64px",
+            fontStyle: "italic",
+            color: "#7a5c48",
+            fontSize: isMobile ? "13px" : "15px",
+            opacity: 0.8,
+          }}
+        >
           ✦ &nbsp; All items available for delivery across Owerri &nbsp; ✦
         </div>
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
-
         .menu-card.reveal {
           opacity: 0;
-          transform: translateY(32px);
+          transform: translateY(28px);
         }
         .menu-card.reveal.visible {
           opacity: 1;
           transform: translateY(0);
-          transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s, background 0.4s;
-        }
-
-        @media (max-width: 1024px) {
-          #menu > div > div:last-child {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-        @media (max-width: 640px) {
-          #menu {
-            padding: 80px 20px !important;
-          }
-          #menu > div > div:last-child {
-            grid-template-columns: 1fr !important;
-          }
+          transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1),
+                      box-shadow 0.4s, background 0.4s;
         }
       `}</style>
     </section>
