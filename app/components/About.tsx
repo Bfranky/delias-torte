@@ -178,19 +178,17 @@ export default function About() {
               boxShadow: "0 32px 64px var(--shadow)",
             }}
           >
-            <Image
-              src={ABOUT_IMAGE}
-              alt="Beautifully decorated artisan cake — Delia's Torte, Owerri"
-              fill
-              sizes="(max-width: 900px) 100vw, 50vw"
-              style={{ objectFit: "cover", transition: "transform 0.6s ease" }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLImageElement).style.transform = "scale(1.04)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLImageElement).style.transform = "scale(1)")
-              }
-            />
+            <img
+  src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=900&q=85&auto=format&fit=crop"
+  alt="Beautifully decorated artisan cake — Delia's Torte, Owerri"
+  style={{
+    width: "100%", height: "100%",
+    objectFit: "cover", display: "block",
+    transition: "transform 0.6s ease",
+  }}
+  onMouseEnter={(e) => ((e.currentTarget as HTMLImageElement).style.transform = "scale(1.04)")}
+  onMouseLeave={(e) => ((e.currentTarget as HTMLImageElement).style.transform = "scale(1)")}
+/>
           </div>
 
           {/* Floating gold-accented quote card */}

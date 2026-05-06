@@ -142,15 +142,11 @@ export default function Hero() {
               boxShadow: "0 48px 96px rgba(0,0,0,0.55)",
             }}
           >
-            <Image
-              src={CAKE_MAIN}
+            <img
+              src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=85&auto=format&fit=crop"
               alt="Elegant layered birthday cake with chocolate frosting"
-              fill
-              sizes="340px"
-              style={{ objectFit: "cover", transition: "transform 0.6s ease" }}
-              priority
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
-            {/* Caption overlay */}
             <div style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
               background: "linear-gradient(transparent, rgba(61,26,14,0.85))",
@@ -158,15 +154,14 @@ export default function Hero() {
             }}>
               <div style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: "13px", fontStyle: "italic",
-                color: "var(--ivory)", opacity: 0.9,
+                fontSize: "13px", fontStyle: "italic", color: "var(--ivory)", opacity: 0.9,
               }}>
                 Signature Birthday Cake
               </div>
             </div>
           </div>
 
-          {/* Second cake — smaller, offset */}
+          {/* Second cake image */}
           <div style={{
             position: "absolute", bottom: "30px", left: "10px",
             width: "210px", height: "260px",
@@ -175,12 +170,10 @@ export default function Hero() {
             border: "3px solid var(--choco)",
             zIndex: 2,
           }}>
-            <Image
-              src={CAKE_SECOND}
+            <img
+              src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=600&q=85&auto=format&fit=crop"
               alt="Chocolate drip cake with decorations"
-              fill
-              sizes="210px"
-              style={{ objectFit: "cover" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
           </div>
 

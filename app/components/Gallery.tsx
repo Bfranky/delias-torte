@@ -67,9 +67,14 @@ export default function Gallery() {
               }}
               onClick={() => setActive(i)}
             >
-              <Image
-                src={photo.src} alt={photo.alt} fill
-                style={{ objectFit: "cover", transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1)" }}
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                style={{
+                  width: "100%", height: "100%",
+                  objectFit: "cover", display: "block",
+                  transition: "transform 0.5s cubic-bezier(0.22,1,0.36,1)",
+                }}
               />
               {/* Hover overlay */}
               <div style={{
